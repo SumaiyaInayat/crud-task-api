@@ -9,3 +9,18 @@ mongoose
     console.log(error);
   });
 module.exports=mongoose;
+
+// app.get(
+//   '/tasklists/:tasklistId',(req,res)=>{
+//       let tasklistId=req.params.tasklistId;
+//       TaskList.find({_id:tasklistId})
+//       .then((taskList)=> {
+//       res.status(200);
+//       res.send(taskList);
+      
+//       }
+//       )
+//       .catch((error)=>{
+//           console.log(error);
+//           res.status(500);
+// });
