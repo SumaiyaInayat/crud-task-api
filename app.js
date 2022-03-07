@@ -70,6 +70,7 @@ app.get(
 
 
 );
+
 //Put is for full update of an object 
 app.put(
     '/tasklists/:tasklistId',(req,res)=>{
@@ -100,17 +101,27 @@ app.patch(
 
     
 );
-//Delete a task by id
-app.delete(
-    '/tasklists/:tasklistId',(req,res)=>{
-        TaskList.findByIdAndDelete(req.params.tasklistId)
+//Delete a tasklist by id
+app.delete('/tasklists/:tasklistId',(req,res)=>{
+        //Delete all tasks within a tasklist if that tasklist is deleted
+        const deleteAllContainingTask=(taskList)=>{
+          Task.deleteMany({_taskListId: req.params.tasklistId })
+              .then(()=>{
+                  return taskList
+              })  
+              .catch((error)=>{
+                  console.log(error);
+              })
+        }   
+        const responeTaskList=TaskList.findByIdAndDelete(req.params.tasklistId)
         .then((taskList)=>{
-            res.status(201);
-            res.send(taskList)
+            deleteAllContainingTask(taskList)
         })
         .catch((error)=>{
             console.log(error);
         })
+        res.status(200);
+        res.send(responeTaskList)
     }
 
     
